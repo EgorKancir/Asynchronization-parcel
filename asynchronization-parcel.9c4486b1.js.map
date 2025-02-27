@@ -1,0 +1,1 @@
+{"version":3,"sources":["index.js"],"names":["alert"],"mappings":";AAAAA,MAAM","file":"asynchronization-parcel.9c4486b1.js","sourceRoot":"..","sourcesContent":["alert(\"Hello\");"]}
