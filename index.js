@@ -111,6 +111,7 @@ function startTimer(seconds) {
         } else {
             clearInterval(timerInterval);
             alert("Timer END");
+            timeInput.value = 0;
         }
     }, 1000); 
 }
