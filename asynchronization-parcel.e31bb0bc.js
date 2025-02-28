@@ -218,6 +218,7 @@ function startTimer(seconds) {
     } else {
       clearInterval(timerInterval);
       alert("Timer END");
+      timeInput.value = 0;
     }
   }, 1000);
 }
@@ -254,7 +255,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49297" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50913" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
