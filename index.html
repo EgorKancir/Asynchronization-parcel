@@ -3,10 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="shortcut icon" href="https://camo.githubusercontent.com/b78fda6d5a1c82e70503694888af31778a2ee5ad908ec118e0f80aac3f3258e2/68747470733a2f2f616368696576656d656e742d696d616765732e7465616d74726565686f7573652e636f6d2f62616467655f6173796e632d70726f6772616d6d696e672d776974682d4a535f7374616765312e706e67" type="image/x-icon">
+    <title>Asynchronization & PARCEL</title>
+    <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    <p>Hello</p>
+    
+    <h1 class="page-title">Asynchronization & PARCEL</h1>
+
+    <!-- 2 -->
+
+    <div class="atimation-group">
+        <div class="atimation-group__container">
+            <div class="atimation-group__circle"></div>
+        </div>
+        <div class="atimation-group__container">
+            <div class="atimation-group__line"></div>
+        </div>
+    </div>
+
+    <!-- 3 -->
+
+    <div id="game__score">Очки: 0</div>
+    <div id="game__area">
+        <div class="game__circle"></div>
+    </div>
+    <button class="game__new-game-btn" type="button">New game</button>
+
+    <!-- 4 -->
+
+    <div class="timer__container">
+        <h2 class="timer__title">Timer</h2>
+        <h3 class="timer__time"><span class="timer__seconds">...</span>s</h3>
+        <div class="timer__input-group">
+            <input type="number" name="seconds" id="timer__input">
+            <button type="button" id="timer__start-btn">Timer start >></button>
+        </div>
+    </div>
 
     <script type="module" src="./index.js"></script>
 </body>
