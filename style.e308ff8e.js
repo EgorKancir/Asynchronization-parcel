@@ -117,119 +117,62 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"index.js":[function(require,module,exports) {
-// 1
-
-var messageIndex = 0;
-function messagePush() {
-  if (messageIndex < 5) {
-    messageIndex += 1;
-    alert("Message number: (".concat(messageIndex, ")"));
-  } else {
-    clearInterval(messageInterval);
-    alert("END message!");
+})({"node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+var bundleURL = null;
+function getBundleURLCached() {
+  if (!bundleURL) {
+    bundleURL = getBundleURL();
   }
+  return bundleURL;
 }
-var messageInterval = setInterval(messagePush, 3000);
-
-// 2
-
-var circle = document.querySelector(".atimation-group__circle");
-var line = document.querySelector(".atimation-group__line");
-var colorArr = ["red", "green", "blue", "yellow", "purpel"];
-var circleIndex = 1;
-var circleRight = false;
-var lineIndex = 0;
-var lineStatus = false;
-function circleAnim() {
-  if (circleIndex > colorArr.length - 1) {
-    circleIndex = 0;
-    circle.style.backgroundColor = colorArr[circleIndex];
-  } else {
-    circle.style.backgroundColor = colorArr[circleIndex];
-    circleIndex += 1;
-  }
-  circleRight = !circleRight;
-  circle.style.transform = "translateX(".concat(circleRight ? 0 : 400, "px)");
-}
-function lineAnim() {
-  if (lineIndex > colorArr.length - 1) {
-    lineIndex = 0;
-    line.style.backgroundColor = colorArr[lineIndex];
-  } else {
-    line.style.backgroundColor = colorArr[lineIndex];
-    lineIndex += 1;
-  }
-  lineStatus = !lineStatus;
-  line.style.width = "".concat(lineStatus ? 100 : 0, "%");
-}
-var circleInterval = setInterval(circleAnim, 2000);
-var lineInterval = setInterval(lineAnim, 2000);
-
-// 3
-
-var gameCircle = document.querySelector(".game__circle");
-var gameArea = document.getElementById("game__area");
-var gameScoreDisplay = document.getElementById("game__score");
-var newGameBtn = document.querySelector(".game__new-game-btn");
-var score = 0;
-var timeLeft = 30;
-var gameInterval = null;
-function moveCircle() {
-  var maxX = gameArea.clientWidth - gameCircle.clientWidth;
-  var maxY = gameArea.clientHeight - gameCircle.clientHeight;
-  var randomX = Math.floor(Math.random() * maxX);
-  var randomY = Math.floor(Math.random() * maxY);
-  gameCircle.style.left = "".concat(randomX, "px");
-  gameCircle.style.top = "".concat(randomY, "px");
-}
-gameCircle.addEventListener("click", function () {
-  score++;
-  gameScoreDisplay.textContent = "\u041E\u0447\u043A\u0438: ".concat(score);
-});
-newGameBtn.addEventListener("click", function () {
-  score = 0;
-  gameScoreDisplay.textContent = "\u041E\u0447\u043A\u0438: ".concat(score);
-  gameCircle.style.display = "block";
-  if (gameInterval) {
-    clearInterval(gameInterval);
-  }
-  gameInterval = setInterval(moveCircle, 1500);
-  setTimeout(function () {
-    clearInterval(gameInterval);
-    gameCircle.style.display = "none";
-    alert("\u0413\u0440\u0430 \u0437\u0430\u0432\u0435\u0440\u0448\u0435\u043D\u0430! \u0412\u0430\u0448 \u0440\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442: ".concat(score, " \u043E\u0447\u043E\u043A"));
-  }, timeLeft * 1000);
-});
-
-// 4
-
-var secondsText = document.querySelector(".timer__seconds");
-var timeInput = document.getElementById("timer__input");
-var startBtn = document.getElementById("timer__start-btn");
-function startTimer(seconds) {
-  var timerSec = 0;
-  var timerText = seconds;
-  var timerInterval = setInterval(function () {
-    if (timerSec <= seconds) {
-      secondsText.textContent = timerText;
-      timerText--;
-      timerSec++;
-    } else {
-      clearInterval(timerInterval);
-      alert("Timer END");
+function getBundleURL() {
+  // Attempt to find the URL of the current script and use that as the base URL
+  try {
+    throw new Error();
+  } catch (err) {
+    var matches = ('' + err.stack).match(/(https?|file|ftp|chrome-extension|moz-extension):\/\/[^)\n]+/g);
+    if (matches) {
+      return getBaseURL(matches[0]);
     }
-  }, 1000);
-}
-startBtn.addEventListener("click", function () {
-  var userSeconds = Number(timeInput.value.trim());
-  if (!isNaN(userSeconds) && userSeconds > 0) {
-    startTimer(userSeconds);
-  } else {
-    alert("The number must be greater than 0!");
   }
-});
-},{}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+  return '/';
+}
+function getBaseURL(url) {
+  return ('' + url).replace(/^((?:https?|file|ftp|chrome-extension|moz-extension):\/\/.+)?\/[^/]+(?:\?.*)?$/, '$1') + '/';
+}
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+},{}],"node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+var bundle = require('./bundle-url');
+function updateLink(link) {
+  var newLink = link.cloneNode();
+  newLink.onload = function () {
+    link.remove();
+  };
+  newLink.href = link.href.split('?')[0] + '?' + Date.now();
+  link.parentNode.insertBefore(newLink, link.nextSibling);
+}
+var cssTimeout = null;
+function reloadCSS() {
+  if (cssTimeout) {
+    return;
+  }
+  cssTimeout = setTimeout(function () {
+    var links = document.querySelectorAll('link[rel="stylesheet"]');
+    for (var i = 0; i < links.length; i++) {
+      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
+        updateLink(links[i]);
+      }
+    }
+    cssTimeout = null;
+  }, 50);
+}
+module.exports = reloadCSS;
+},{"./bundle-url":"node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"style.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -398,5 +341,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["node_modules/parcel-bundler/src/builtins/hmr-runtime.js","index.js"], null)
-//# sourceMappingURL=/asynchronization-parcel.e31bb0bc.js.map
+},{}]},{},["node_modules/parcel-bundler/src/builtins/hmr-runtime.js"], null)
+//# sourceMappingURL=/style.e308ff8e.js.map
